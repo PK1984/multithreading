@@ -17,8 +17,9 @@ public:
     TimeMe(const std::string& label) : label_(label), start_(std::chrono::high_resolution_clock::now()) {}
     ~TimeMe(){
         auto stop = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start_);
         std::unique_lock<std::mutex> lock(TimeMe::mtx_);
-        std::cout << label_ << " = " << std::chrono::duration_cast<std::chrono::milliseconds>(stop - start_).count() << " ms" << std::endl;
+        std::cout << label_ << " = " << duration.count() << " ms" << std::endl;
     }  
 };
 std::mutex TimeMe::mtx_;
@@ -26,9 +27,14 @@ std::mutex TimeMe::mtx_;
 template <class type>
 struct AlignedType {
 //    alignas(std::hardware_desctructive_interference_size) type val;
-//    alignas(64) type val;
-    type val;
+    alignas(64) type val;
     AlignedType(type value) : val(value) {}
+};
+
+template <class type>
+struct UnalignedType {
+    type val;
+    UnalignedType(type value) : val(value) {}
 };
 
 template <class elementType>
@@ -38,12 +44,12 @@ private:
     void partialSum(std::vector<elementType>& input, const int start, const int stop, elementType& accumulator) {
         int lastElement = stop;
         if (input.size() < stop ) lastElement = input.size();
-        //accumulator = std::accumulate(input.begin() + start, input.begin() + lastElement, 0);
         for (auto i = start; i < lastElement; ++i ) accumulator += input[i];
     }
 public:
     FalseSharingAccumulator() : numThreads_(std::thread::hardware_concurrency()) {}
-    elementType elementwiseSum(std::vector<elementType>& input){
+    elementType elementwiseSum(std::vector<elementType>& input)
+    {
         std::vector<AlignedType<elementType>> partialProduct(numThreads_,0);
         std::vector<std::thread> threads;
         int batchSize = input.size()/numThreads_ + 1;
@@ -60,23 +66,24 @@ public:
                 return sum + next.val;
             });
     }
-    int getNumThreads(){ return numThreads_;}
 };
 
-template <class t>
-void fillWithRandomNumbers(std::vector<t>& vect){
-    for (auto it = vect.begin(); it != vect.end(); ++it){ *it = rand();}
-}
 int main(){
-//    std::cout << sizeof(AlignedType<double>(0));
-    auto timer1(TimeMe("Total time"));
-    /*    {
-        auto timer1(TimeMe("Random generator"));
-        fillWithRandomNumbers(vect);
-    }   */
-    std::vector<int> vect(200000000,9);
+    /* get total execution time */
+    auto timer1(TimeMe("Total execution time"));
+    std::cout << "The output structure is aligned to: " << sizeof(AlignedType<int>(0)) << " bytes" << std::endl;
+
+    /* initialize container used for input data storage */
+    const int numElements = 200000000;
+    const int initialValue = 7;
+    std::vector<int> vect(numElements,initialValue);
+
+    /* initialize accumulator, run it and time it */
     FalseSharingAccumulator<int> accumulator;
-    auto timer2(TimeMe("Accumulation time"));
-    if ( accumulator.elementwiseSum(vect) == 4567891266 ) std::cout << "Lucky me!"; // just so that the compiler does not optimize everything out
+    {
+        auto timer2(TimeMe("Multithreading aligned accumulate"));
+        if ( accumulator.elementwiseSum(vect) == 567 ) std::cout << "Guessed it! Lucky me!"; // using the output so that the compiler does not optimize too much
+    }
+
     return 0;
 }
