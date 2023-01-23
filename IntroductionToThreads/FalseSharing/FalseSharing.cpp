@@ -1,12 +1,10 @@
-#include <thread>
-#include <vector>
-#include <iostream>
-#include <numeric>
-#include <functional>
-#include <cstdlib>
 #include <chrono>
+#include <iostream>
 #include <mutex>
 #include <new>
+#include <numeric>
+#include <thread>
+#include <vector>
 
 class TimeMe {
 private:
@@ -37,7 +35,7 @@ struct UnalignedType {
     UnalignedType(type value) : val(value) {}
 };
 
-template <class elementType>
+template <class alignmentType, class elementType>
 class FalseSharingAccumulator {
 private:
     std::size_t numThreads_;
@@ -50,7 +48,9 @@ public:
     FalseSharingAccumulator() : numThreads_(std::thread::hardware_concurrency()) {}
     elementType elementwiseSum(std::vector<elementType>& input)
     {
-        std::vector<AlignedType<elementType>> partialProduct(numThreads_,0);
+        std::vector<alignmentType> partialProduct(numThreads_,0);
+        std::cout << "The output structure is aligned to: " << sizeof(alignmentType(0)) << " bytes" << std::endl;
+
         std::vector<std::thread> threads;
         int batchSize = input.size()/numThreads_ + 1;
         for (auto i = 0; i < numThreads_; ++i) {
@@ -71,7 +71,6 @@ public:
 int main(){
     /* get total execution time */
     auto timer1(TimeMe("Total execution time"));
-    std::cout << "The output structure is aligned to: " << sizeof(AlignedType<int>(0)) << " bytes" << std::endl;
 
     /* initialize container used for input data storage */
     const int numElements = 200000000;
@@ -79,9 +78,16 @@ int main(){
     std::vector<int> vect(numElements,initialValue);
 
     /* initialize accumulator, run it and time it */
-    FalseSharingAccumulator<int> accumulator;
     {
-        auto timer2(TimeMe("Multithreading aligned accumulate"));
+        FalseSharingAccumulator<AlignedType<int>, int> accumulator;
+        auto timer(TimeMe("Multithreaded accumulate"));
+        if ( accumulator.elementwiseSum(vect) == 567 ) std::cout << "Guessed it! Lucky me!"; // using the output so that the compiler does not optimize too much
+    }
+
+    /* initialize accumulator, run it and time it */
+    {
+        FalseSharingAccumulator<UnalignedType<int>, int> accumulator;
+        auto timer(TimeMe("Multithreaded accumulate"));
         if ( accumulator.elementwiseSum(vect) == 567 ) std::cout << "Guessed it! Lucky me!"; // using the output so that the compiler does not optimize too much
     }
 
