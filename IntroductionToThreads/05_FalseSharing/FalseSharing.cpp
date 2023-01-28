@@ -8,8 +8,8 @@
 
 class TimeMe {
 private:
-    std::chrono::time_point<std::chrono::high_resolution_clock> start_;
     std::string label_;
+    std::chrono::time_point<std::chrono::high_resolution_clock> start_;
     static std::mutex mtx_;
 public:
     TimeMe(const std::string& label) : label_(label), start_(std::chrono::high_resolution_clock::now()) {}
@@ -39,8 +39,8 @@ template <class alignmentType, class elementType>
 class FalseSharingAccumulator {
 private:
     std::size_t numThreads_;
-    void partialSum(std::vector<elementType>& input, const int start, const int stop, elementType& accumulator) {
-        int lastElement = stop;
+    void partialSum(std::vector<elementType>& input, const std::size_t start, const std::size_t stop, elementType& accumulator) {
+        std::size_t lastElement = stop;
         if (input.size() < stop ) lastElement = input.size();
         for (auto i = start; i < lastElement; ++i ) accumulator += input[i];
     }
@@ -53,12 +53,12 @@ public:
 
         std::vector<std::thread> threads;
         int batchSize = input.size()/numThreads_ + 1;
-        for (auto i = 0; i < numThreads_; ++i) {
-            int start = i * batchSize;
-            int stop = ( i + 1 ) * batchSize;
+        for (auto i = 0ul; i < numThreads_; ++i) {
+            std::size_t start = i * batchSize;
+            std::size_t stop = ( i + 1 ) * batchSize;
             threads.emplace_back(&FalseSharingAccumulator::partialSum, this, std::ref(input), start, stop, std::ref(partialProduct[i].val));
         }
-        for (auto i = 0; i < numThreads_; ++i)
+        for (auto i = 0ul; i < numThreads_; ++i)
             threads[i].join();
 
         return std::accumulate(partialProduct.begin(), partialProduct.end(), 0,
