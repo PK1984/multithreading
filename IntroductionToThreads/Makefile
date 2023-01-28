@@ -1,25 +1,17 @@
 CC=g++
-CFLAGS=-c -Wall -O0 -pthread
+CFLAGS=-c -Wall -O0 --std=c++20 -I
 LDFLAGS=-pthread
 
-SOURCES1=00_StartJoin/example1.cpp
-OBJECTS1=$(SOURCES1:.cpp=.o)
-EXECUTABLE1=./start_join.out
+SRC := $(wildcard */*.cpp)
+EXE := $(patsubst %.cpp,%,$(SRC))
 
-SOURCES2=05_FalseSharing/SimpleMultithreadedSorter.cpp
-OBJECTS2=$(SOURCES2:.cpp=.o)
-EXECUTABLE2=./false_sharing.out
+all: $(EXE)
 
-all: start_join false_sharing
+%.out: %.o
+	@$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
 
-start_join: $(OBJECTS1)
-	$(CC) $(LDFLAGS) $(OBJECTS1) -o $(EXECUTABLE1)
-
-false_sharing: $(OBJECTS2)
-	$(CC) $(LDFLAGS) $(OBJECTS2) -o $(EXECUTABLE2)
-
-.cpp.o:
-	$(CC) $(CFLAGS) $< -o $@
+%.o: %.cpp
+	@$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	rm -rf $(EXECUTABLE1) $(EXECUTABLE2) $(EXECUTABLE3) $(OBJECTS1) $(OBJECTS2)
+	@rm -f $(EXE) */*.o
