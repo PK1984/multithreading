@@ -7,8 +7,8 @@
 
 class TimeMe {
 private:
-    std::chrono::time_point<std::chrono::high_resolution_clock> start_;
     std::string label_;
+    std::chrono::time_point<std::chrono::high_resolution_clock> start_;
     static std::mutex mtx_;
 public:
     TimeMe(const std::string& label) : label_(label), start_(std::chrono::high_resolution_clock::now()) {}
