@@ -22,6 +22,9 @@ public:
 };
 std::mutex TimeMe::mtx_;
 
+/* at the cost of additional memory, one can assure that no false sharing takes place
+ * here, the value stored in the structure (int in below example) is aligned to
+ * the cache line size (on modern architectures 64 bytes) */
 template <class type>
 struct AlignedType {
 //    alignas(std::hardware_desctructive_interference_size) type val;
@@ -29,6 +32,8 @@ struct AlignedType {
     AlignedType(type value) : val(value) {}
 };
 
+/* the structure that holds the accumulators for all the threads uses default alignment
+ * this may result in writing to the same cache line by all the threads, incurring performance penalties */
 template <class type>
 struct UnalignedType {
     type val;

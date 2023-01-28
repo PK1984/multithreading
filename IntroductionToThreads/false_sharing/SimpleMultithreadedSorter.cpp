@@ -61,18 +61,5 @@ int main(){
     th2.join();
     merge(0 * size / threadNum, 2 * size / threadNum, 4 * size / threadNum); 
     //if (std::is_sorted(randomDataVec.begin(), randomDataVec.end())) std::cout << "sorted!" << std::endl;
-
-    {
-        auto timer = TimeMe("creating and joining and destroying std::thread object");
-        std::thread th;
-        {
-            auto timer = TimeMe("initialize std::thread object");
-            th = std::thread([](){});
-        }
-        {
-            auto timer = TimeMe("join std::thread object");
-            th.join();
-        }
-    }
     return 0;
 }

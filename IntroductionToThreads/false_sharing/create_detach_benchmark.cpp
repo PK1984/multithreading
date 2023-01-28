@@ -1,9 +1,6 @@
-#include <algorithm>
 #include <iostream>
 #include <mutex>
 #include <thread>
-#include <vector>
-#include <random>
 #include <chrono>
 
 class TimeMe {
@@ -21,26 +18,6 @@ public:
     }  
 };
 std::mutex TimeMe::mtx_;
-
-std::vector<int> getRandomData(const int size){
-    std::vector<int> output(size);
-    std::generate(output.begin(), output.end(), std::rand);
-    return output;
-}
-
-void sorter(std::vector<int>& vect, const int start, const int stop, const int id)
-{
-    auto timer = TimeMe("Time spent in worker " + std::to_string(id));
-    std::sort(vect.begin() + start, vect.begin() + stop);
-}
-
-std::vector<int> sequentialSorter(std::vector<int> vect){
-    auto timer = TimeMe("Time spent on sequential sorting");
-    std::sort(vect.begin(), vect.end());
-    return vect;
-}
-
-
 
 int main(){
     constexpr int iterations = 100000;
