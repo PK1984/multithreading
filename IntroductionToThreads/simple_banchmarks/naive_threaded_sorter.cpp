@@ -39,10 +39,8 @@ std::vector<int> sequentialSorter(std::vector<int> vect){
     return vect;
 }
 
-
-
 int main(){
-    constexpr int size = 1000;
+    constexpr int size = 100000;
     constexpr int threadNum = 4;
     auto randomDataVec = getRandomData(size);
     sequentialSorter(randomDataVec);
