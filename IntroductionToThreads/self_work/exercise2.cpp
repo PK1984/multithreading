@@ -2,7 +2,8 @@
  * Improve the following code so that when the needle is found all the threads stop execution.
  * Assume there is always at least one needle in a haystack.
  * Compare the code with and without optimizations (-O0 ... -O3)
- * Does the global variable `found` need to be an atomic? */
+ * Does the global variable `found` need to be an atomic?
+ * Does your code improve the performance? */
 
 #include <iostream>
 #include <thread>
@@ -45,7 +46,7 @@ int main(){
 	std::srand(std::time(nullptr));
 	
 	auto workSize = haystack.size() / numThreads + 1;
-	auto needle = haystackSize / numThreads / 2;
+	auto needle = haystackSize / numThreads / 2; //needle is in the middle of the range for repeatability
 	std::cout << " looking for : " << needle << std::endl;
 	std::thread th1(search, std::cref(haystack), 0 * workSize, workSize, needle);
 	std::thread th2(search, std::cref(haystack), 1 * workSize, workSize, needle);
