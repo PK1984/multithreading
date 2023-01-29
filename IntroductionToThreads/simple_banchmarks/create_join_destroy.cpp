@@ -22,7 +22,7 @@ std::mutex TimeMe::mtx_;
 int main(){
     constexpr int iterations = 1000;
 	auto labmda = [](){};
-	auto timer = TimeMe("creating and joining and destroying std::thread object");
+	auto timer = TimeMe("creating and joining and destroying std::thread object (iterations = "+std::to_string(iterations)+")");
     for (auto i = 0ul; i < iterations; ++i)
     {
         std::thread th(labmda);
