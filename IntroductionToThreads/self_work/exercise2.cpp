@@ -1,5 +1,6 @@
 /* The following code looks for a needle in a haystack.
  * Improve the following code so that when the needle is found all the threads stop execution.
+ * Assume there is always at least one needle in a haystack.
  * Compare the code with and without optimizations (-O0 ... -O3)
  * Does the global variable `found` need to be an atomic? */
 
@@ -53,7 +54,7 @@ int main(){
 	
 	{
 		auto timer = TimeMe("Waiting");
-		while (!found) { std::this_thread::sleep_for(std::chrono::milliseconds(1)); }
+		while (!found) { std::this_thread::sleep_for(std::chrono::milliseconds(1)); } //hold the execution until needle found
 		//~ while (!found) {  std::this_thread::yield();}
 	}
 	{

@@ -22,11 +22,13 @@ int main()
 {
     auto lambda = [](){ print("1. Lambda"); };
     std::thread thread1(lambda);
-    //std::cout << std::boolalpha << thread1.joinable() << std::endl;
+    std::cout << std::boolalpha << thread1.joinable() <<  std::endl;
+    std::cout << thread1.get_id() <<  std::endl;
     thread1.join();
-    //std::cout << std::boolalpha << thread1.joinable() <<  std::endl;
-    //std::cout << thread1.get_id() <<  std::endl;
-	//if (thread1.joinable()) thread1.join();
+    std::cout << std::boolalpha << thread1.joinable() <<  std::endl;
+    std::cout << thread1.get_id() <<  std::endl;
+    //thread1.join();
+	if (thread1.joinable()) thread1.join();
 
 
     SimpleFunctor functor;

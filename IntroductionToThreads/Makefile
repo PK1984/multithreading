@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-c -Wall -O0 --std=c++20 -I
+CFLAGS=-Wall -O0 --std=c++20 -I
 LDFLAGS=-pthread
 
 SRC := $(wildcard */*.cpp)

@@ -16,7 +16,7 @@ int main()
     std::thread th(function, 2, 3, std::ref(byReferenceVal));
 
     /* the thread may not have finished yet - data race! */
-    std::cout << "i*i = " << byReferenceVal<< "; j*j = " << lambdaCaptureVal << "; ";
+    std::cout << "i*i = " << byReferenceVal << "; j*j = " << lambdaCaptureVal << "; ";
 
     /* synchronize with the thread */
     th.join();

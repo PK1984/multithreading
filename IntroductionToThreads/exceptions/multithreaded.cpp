@@ -1,7 +1,7 @@
 #include <iostream>
 #include <thread>
  
-void jobThatOcasionallyThrows() {throw std::invalid_argument( "Argument jest inwalidą" );}
+void jobThatOcasionallyThrows() {throw std::invalid_argument( "Invalid argument." );}
 void someLargeJob(){int x=0; for ( int i = 0; i < 1000000; ++i) {x+=i;}}
  
 void performJobsConcurrently(){
@@ -15,7 +15,7 @@ int main()
     try{
         performJobsConcurrently();
     } catch (std::invalid_argument& arg) {
-        std::cout << "I have handled exception" << std::endl;
+        std::cout << "I have handled the exception" << std::endl;
     }
     std::cout << "I have reached the end." << std::endl;
     return 0;

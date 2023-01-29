@@ -1,3 +1,4 @@
+/* correct mistakes  (at least 3) */
 #include <iostream>
 #include <thread>
 #include <vector>

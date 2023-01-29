@@ -14,7 +14,7 @@ int main()
 {
     auto detachMe = [](){
         print("1. Going to sleep. ");
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
         print("2. I am awake now. ");
     };
      
@@ -22,7 +22,7 @@ int main()
     std::thread th(detachMe);
     th.detach();
  
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
     print("3. Finished exsecution. ");
     return 0;
 }
