@@ -27,8 +27,8 @@ std::mutex TimeMe::mtx_;
  * the cache line size (on modern architectures 64 bytes) */
 template <class type>
 struct AlignedType {
-//    alignas(std::hardware_desctructive_interference_size) type val;
-    alignas(64) type val;
+    alignas(std::hardware_destructive_interference_size) type val;
+//    alignas(64) type val;
     AlignedType(type value) : val(value) {}
 };
 
@@ -72,7 +72,7 @@ public:
         for (auto i = 0ul; i < numThreads_; ++i) {
             std::size_t start = i * batchSize;
             std::size_t stop = ( i + 1 ) * batchSize;
-            threads.emplace_back(&FalseSharingAccumulator::partialSum, this, std::ref(input), start, stop, std::ref(partialProduct[i].val));
+            threads.emplace_back(&FalseSharingAccumulator::partialSum, this, std::cref(input), start, stop, std::ref(partialProduct[i].val));
         }
         /* join all threads */
         for (auto i = 0ul; i < numThreads_; ++i) threads[i].join();
