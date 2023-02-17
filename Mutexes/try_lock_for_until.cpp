@@ -31,7 +31,8 @@ void worker1(int id, std::chrono::milliseconds timeout) {
 template<class clock>
 void worker2(int id, std::chrono::time_point<clock> timePoint) {
     std::cout << "Worker " << id << " will try to acquire lock \n";
-	if (g_mutex.try_lock_until(timePoint)) { //may lock for for shorted time than expected!
+	if (g_mutex.try_lock_until(timePoint)) 
+	{
 		std::cout << "Worker " << id << " acquired lock \n";
 		work(id); // what if work throws? -> use lock_guard/scoped_lock
 		g_mutex.unlock(); // release the lock
