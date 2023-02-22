@@ -44,7 +44,16 @@ int main() {
         std::cout << "After transferring 20 from a to b: a=" << a.getBalance() << ", b=" << b.getBalance() << std::endl;
     } else {
         std::cout << "Failed to transfer 20 from a to b (not enough balance in a)" << std::endl;
-    }
+    }    
+    
+    while (true) {
+		std::thread th1(&BankAccount::transfer, std::ref(a), std::ref(b), 1);
+		std::thread th2(&BankAccount::transfer, std::ref(b), std::ref(a), 1);
+		th1.join();
+		th2.join();
+		std::cout << ".";
+	}
+	std::cout << std::endl;
 
     return 0;
 }
