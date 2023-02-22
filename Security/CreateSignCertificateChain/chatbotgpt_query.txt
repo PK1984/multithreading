@@ -1,0 +1,5 @@
+write using openssl command line tool commands that will:
+1. generate self signed root certificate and write it to file root.pem
+2. generate intermediate certificate and sign it with root certificate from 1. Save it to intermediate.pem This certificate will be used to sign leaf certificates. Set all necessary v3 extensions.
+3. generate leaf certificate and sign it with intermediate certificate from 2. Save it to leaf.pem
+4. save generated certificates from 1., 2., 3. in pem file named chain.pem
