@@ -17,8 +17,6 @@ string encrypt_symmetric(const string& plain_text, const string& cipher_name, co
     EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
 	std::cout << "Secret key has length of: " << key.length() << std::endl;
     EVP_EncryptInit_ex(ctx, cipher, NULL, (const unsigned char*)key.c_str(), NULL);
-    // - We have updated the init function, what should we call it?
-    // - Just add '2' at the end
     //~ if (!EVP_EncryptInit_ex2(ctx, EVP_idea_cbc(), key, iv, NULL)) {
         //~ /* Error */
         //~ EVP_CIPHER_CTX_free(ctx);
@@ -87,7 +85,7 @@ int main()
 {
     string plain_text = "Hello, world!";
     string cipher_name = "AES-128-CBC";
-    string key = "mysecretkey";
+    string key = "mysecretkey"; // secret should be not only random, but also longer!
  
     string cipher_text = encrypt_symmetric(plain_text, cipher_name, key);
     cout << "Cipher text: " << cipher_text << endl;

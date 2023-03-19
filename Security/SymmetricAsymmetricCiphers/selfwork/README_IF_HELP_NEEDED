@@ -1,0 +1,19 @@
+How to encrypt a file using symmetric cipher aes-256 in cbc mode?
+
+openssl enc -e -aes-256-cbc -in <input_file> -out <outout_file> -K <key> -iv <iv>
+
+enc - symmetric encryption/decryption
+-e  - encrypt (-d for decrypt)
+-aes-256-cbc - cipher, the block size is 128 bits
+-in - input file for encryption
+-out - output - encrypted input file
+-K - the exact key used for encryption
+-iv - initialization vector, the cbc mode requires initial vector to be applied to the first block, the size of single block (128 bits)
+you can pass the contents of a file as an argument with  $(cat filename) (e.g. openssl -iv $(cat filename) .....)
+
+openssl pkeyutl -decrypt -inkey private_key.pem -in plaintext.txt.enc -out plaintext.txt
+
+-decrypt - will decrypt the data
+-inkey - the file storing the input key
+-in - the encrypted data
+-out - filename for the decrypted data
