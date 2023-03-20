@@ -19,4 +19,4 @@ clean:
 # Usage: make <program_name>
 .PHONY: $(PROGS)
 $(PROGS):
-	g++ -o $@ -Wall -O0 --std=c++20 $@.cpp  -lssl -lcrypto
+	g++ -o $@  -O2 --std=c++11 $@.cpp  -lssl -lcrypto
