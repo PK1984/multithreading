@@ -1,0 +1,1 @@
+rm *csr *srl *key
