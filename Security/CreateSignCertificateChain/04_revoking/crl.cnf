@@ -1,0 +1,13 @@
+[ca]
+default_ca = my_ca
+
+[my_ca]
+new_certs_dir = .
+database = crl.db
+certificate = root.pem
+private_key = root.key
+serial = crlnumber
+crl = crl.pem
+crlnumber = crlnumber
+default_crl_days = 30
+default_md = sha256
