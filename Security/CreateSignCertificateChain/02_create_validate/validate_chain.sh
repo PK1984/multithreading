@@ -4,6 +4,7 @@ openssl verify -x509_strict -CAfile root.pem intermediate.pem #check intermediat
 openssl verify -x509_strict -CAfile intermediate.pem leaf.pem #intermediate is not CA certificate! root needs to be in trusted store, otherwise this will fail (err2)
 openssl verify -x509_strict -untrusted intermediate.pem leaf.pem #root need to be in trusted store, otherwise this will fail (err20)
 openssl verify -x509_strict -CAfile root.pem -untrusted intermediate.pem leaf.pem #check whole chain - ok
+
 openssl verify -show_chain -partial_chain -x509_strict -trusted intermediate.pem leaf.pem 
 
 openssl verify -x509_strict -CAfile root.pem -untrusted evil_root.pem evil_intermediate.pem #fails, as it should
